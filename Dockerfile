@@ -1,4 +1,11 @@
-FROM nginx:alpine
-COPY nginx.conf /etc/nginx/nginx.conf
-EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+worker_processes auto;
+events {}
+stream {
+    upstream backend {
+        server gcpx.dev-zoom.buzz:700;
+    }
+    server {
+        listen 8080;
+        proxy_pass backend;
+    }
+}
